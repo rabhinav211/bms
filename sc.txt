@@ -176,3 +176,73 @@ with open(file_path, "w") as f:
     f.write(scala_commands.strip())
 
 file_path
+
+
+scala programs
+[5/25, 7:08 PM] Shlok🐤: LINEAR SEARCH SCALA
+import scala.io.StdIn._
+object LinearSearch {
+    def main(args : Array[String]): Unit ={
+        println("Enter the number of elements in the array :")
+        val size=readInt()
+        val arr=new Array[Int](size)
+        for(i<- 0 until size){
+            print(s"enter the element ${i+1} :")
+            arr(i)=readInt()
+        }
+        println("Enter the element to search for : ")
+        val target=readInt()
+        var found = false
+        for(i<-arr.indices){
+            if (arr(i)==target){
+                found=true
+                print(s"element found at index ${i+1}") 
+                return}
+        }
+        if(found==false) {
+            print("element not found")
+            return
+    }
+}
+}
+[5/25, 8:06 PM] Shlok🐤: FIBONACCI
+object Fibonacci{
+    def main(args : Array[String]): Unit ={
+        var a=0
+        var b=1
+        for(i <- 0 to 10){
+            print(s"$a ")
+            var temp=a+b
+            a=b
+            b=temp
+            
+        }
+    }
+}
+[5/25, 11:36 PM] Shlok🐤: SPARK ERROR COUNT
+import org.apache.spark.{SparkConf, SparkContext}
+
+object ErrorCountFromLog {
+  def main(args: Array[String]): Unit = {
+    // Create Spark configuration and context
+    val conf = new SparkConf().setAppName("ErrorCounter").setMaster("local")
+    val sc = new SparkContext(conf)
+
+    // Read the log file (change the path as needed)
+    val logFile = sc.textFile("/path/to/your/logfile.log")
+
+    // Use flatMap to split lines into words
+    val words = logFile.flatMap(_.split("\\s+")) // splits by whitespace
+
+    // Filter for the word "error" (case-insensitive)
+    val errors = words.filter(word => word.toLowerCase == "error")
+
+    // Count the number of times "error" appears
+    val errorCount = errors.count()
+
+    // Print the result
+    println(s"Number of 'error' entries in the log file: $errorCount")
+
+    sc.stop()
+  }
+}
