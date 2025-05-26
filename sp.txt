@@ -293,3 +293,28 @@ val inputRDD = spark.sparkContext.parallelize(List(("Z", 1),("A", 20),("B", 30),
 println("output max : "+inputRDD.reduce( (a,b)=> ("max",a._2 min b._2))._2)
 println("output max : "+inputRDD.reduce( (a,b)=> ("max",a._2 max b._2))._2)
 }
+
+wordcount
+import org.apache.spark.{SparkConf, SparkContext}
+
+// Create Spark Context
+val conf = new SparkConf().setAppName("SimpleWordCount").setMaster("local")
+val sc = new SparkContext(conf)
+
+// Read file
+val rdd = sc.textFile("file.txt") // Replace with your filename
+
+// Count words
+val counts = rdd
+.flatMap(line => line.split("\\s+")) // Split lines into words
+.map(word => (word, 1)) // Map each word to (word, 1)
+.reduceByKey(_ + _) // Sum counts for each word
+.filter { case (_, count) => count > 4 } // Filter words with count > 4
+
+// Show result
+counts.collect().foreach { case (word, count) =>
+println(s"$word $count")
+}
+
+// Stop Spark Context
+sc.stop()
