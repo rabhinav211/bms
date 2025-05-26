@@ -339,3 +339,14 @@ val words = textFile.flatMap(_.split(" "))
 val wordCounts = words.map((_, 1)).reduceByKey(_ + _)
 val filtered = wordCounts.filter{ case (_, count) => count > 4 }
 filtered.collect().foreach(println)
+
+
+character count in word
+r10=sc.textFile("/Users/manjarijoshi/Downloads/t1.txt")
+r10: org.apache.spark.rdd.RDD[String] = /Users/manjarijoshi/Downloads/t1.txt MapPartitionsRDD[8] at textFile at <console>:23
+
+scala> val r11=r10.map(x=>x.length)
+r11: org.apache.spark.rdd.RDD[Int] = MapPartitionsRDD[9] at map at <console>:24
+
+scala> val r12=r11.reduce((x,y)=>x+y)
+r12: Int = 38
