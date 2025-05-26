@@ -318,3 +318,24 @@ println(s"$word $count")
 
 // Stop Spark Context
 sc.stop()
+
+
+samraat codes
+spark program -3:
+import org.apache.spark.streaming._
+val ssc = new StreamingContext(sc, Seconds(5))
+val lines = ssc.socketTextStream("localhost", 9999)
+val stopwords = Set("the", "is", "in", "a", "an", "and", "to", "both")
+def lemmatize(word: String): String = if (word.endsWith("ing")) word.dropRight(3) else if (word.endsWith("ed")) word.dropRight(2) else word
+val cleaned = lines.map(_.toLowerCase.replaceAll("[^a-z\\s]", "").replaceAll("\\s+", " ").split(" ").filter(w => !stopwords.contains(w) && w.nonEmpty).map(lemmatize).mkString(" "))
+cleaned.print()
+ssc.start()
+ssc.awaitTermination()
+
+
+spark program -2 (rdd + flatmap)
+val textFile = sc.textFile("/home/bmscecs/Input.txt")
+val words = textFile.flatMap(_.split(" "))
+val wordCounts = words.map((_, 1)).reduceByKey(_ + _)
+val filtered = wordCounts.filter{ case (_, count) => count > 4 }
+filtered.collect().foreach(println)
